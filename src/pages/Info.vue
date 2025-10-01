@@ -1,5 +1,6 @@
 <template>
-  <div class="flex justify-end">
+  <div>
+    <div class="flex justify-end">
     <router-link to="./create-task" replace>
       <BackIcon class="my-5" />
     </router-link>
@@ -19,6 +20,7 @@
     <span class="text-text text-2xl font-semibold italic"
       >Give taskvue a try and see how it improves your productivity!
     </span>
+  </div>
   </div>
 </template>
 
