@@ -79,7 +79,7 @@ const newTaskTitle = ref("");
 const taskShow = ref(0);
 const taskStore = useTaskStore();
 const {tasks} = storeToRefs(taskStore);
-
+``
 async function addTask() {
   if(!newTaskTitle.value.trim()) return;
   await taskStore.addTask(newTaskTitle.value, 1);

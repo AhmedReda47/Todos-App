@@ -10,15 +10,16 @@ export const useUserStore = defineStore("user", {
   actions: {
     login(userName, id) {
       (this.name = userName), (this.id = id);
-      localStorage.setItem("userId", id , "name" , userName);
+      localStorage.setItem("currentUser", JSON.stringify({id, name:userName}));
       this.isLoggedIn = true;
     },
     async autoLogin() {
-      const userId = localStorage.getItem("userId");
-      if (userId) {
+      const storedUser = localStorage.getItem("currentUser");
+      if (storedUser) {
+        const user = JSON.parse(storedUser)
         try {
           const { data } = await axios.get(
-            `http://localhost:5000/users/${userId}`
+            `http://localhost:5000/users/${user.id}`
           );
           this.name = data.name;
           this.id = data.id;
@@ -31,10 +32,10 @@ export const useUserStore = defineStore("user", {
     },
 
     logout(){
-        // this.name = '',
-        // this.id = '',
-        // this.isLoggedIn = false,
-        // localStorage.removeItem('userId')
+        this.name = '',
+        this.id = '',
+        this.isLoggedIn = false,
+        localStorage.removeItem('currentUser')
     }
   }
 });

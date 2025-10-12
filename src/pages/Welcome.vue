@@ -24,15 +24,14 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { onMounted, ref } from "vue";
 import api from "../api/axios";
-import axios from "axios";
 
 const router = useRouter();
 const useStore = useUserStore();
 const inputName = ref();
 
 async function login() {
-  const savedId = localStorage.getItem("userId")
-  if (savedId) {
+  // const savedId = localStorage.getItem("currentUser")
+  if (useStore.isLoggedIn) {
     await useStore.autoLogin();
     router.push('/create-task');
     return;
@@ -58,8 +57,9 @@ async function login() {
   }
 }
 
-onMounted(() => {
-  useStore.autoLogin();
+onMounted(async () => {
+  await useStore.autoLogin();
+  if (useStore.isLoggedIn) router.push('/create-task');
 })
 </script>
 
