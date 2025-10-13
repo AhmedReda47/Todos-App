@@ -11,9 +11,9 @@
       <router-link to="/info">
         <InfoIcon/>
       </router-link>
-      <router-link to="/" replace>
+      <button class="flex " @click="useStore.logout(); $router.push('/')">
           <ExitIcon/>
-      </router-link>
+      </button>
     </div>
   </nav>
 </template>
@@ -27,7 +27,6 @@ import ExitIcon from "../components/ExitIcon.vue";
 import InfoIcon from "../components/InfoIcon.vue";
 
 const useStore = useUserStore();
-const router = useRouter();
 
 onMounted(() => {
   useStore.autoLogin();

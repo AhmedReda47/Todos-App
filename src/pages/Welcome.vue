@@ -1,12 +1,12 @@
 <template>
   <div class="flex justify-center items-center flex-col gap-24 mt-32 z-50">
     <LogoText class="text-7xl xl:text-9xl" />
-    <h2 class="text-3xl md:text-5xl font-semibold text-text" v-if="useStore.isLoggedIn">
-      Welcome back {{ useStore.name }}
+    <h2 class="text-3xl md:text-5xl font-semibold text-text" v-if="userStore.isLoggedIn">
+      Welcome back {{ userStore.name }}
     </h2>
     <h2 class="text-5xl font-semibold text-text" v-else>Welcome to taskvue</h2>
     <input
-      v-if="useStore.isLoggedIn === false"
+      v-if="userStore.isLoggedIn === false"
       v-model="inputName"
       @keyup.enter="login"
       type="text"
@@ -24,15 +24,18 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { onMounted, ref } from "vue";
 import api from "../api/axios";
+import { useTaskStore } from "../stores/tasks";
 
 const router = useRouter();
-const useStore = useUserStore();
+const userStore = useUserStore();
+const taskStore = useTaskStore();
 const inputName = ref();
 
 async function login() {
   // const savedId = localStorage.getItem("currentUser")
-  if (useStore.isLoggedIn) {
-    await useStore.autoLogin();
+  if (userStore.isLoggedIn) {
+    await userStore.autoLogin();
+    await taskStore.fetchTasks(userStore.id)
     router.push('/create-task');
     return;
   }
@@ -50,7 +53,7 @@ async function login() {
       });
       user = res.data
     }
-    useStore.login(user.name, user.id);
+    userStore.login(user.name, user.id);
     router.push("/create-task");
   } catch (error) {
     console.log("Login failed:", error);
@@ -58,8 +61,8 @@ async function login() {
 }
 
 onMounted(async () => {
-  await useStore.autoLogin();
-  if (useStore.isLoggedIn) router.push('/create-task');
+  await userStore.autoLogin();
+  if (userStore.isLoggedIn) router.push('/create-task');
 })
 </script>
 
